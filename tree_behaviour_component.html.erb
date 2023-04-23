@@ -1,0 +1,75 @@
+<style>
+    .tree{
+        --spacing : 1.5rem;
+        --radius  : 10px;
+    }
+
+    .tree li{
+        display      : block;
+        position     : relative;
+        padding-left : calc(2 * var(--spacing) - var(--radius) - 2px);
+    }
+
+    .tree ul{
+        margin-left  : calc(var(--radius) - var(--spacing));
+        padding-left : 0;
+    }
+
+    .tree ul li{
+        border-left : 2px solid #ddd !important;
+    }
+
+    .tree ul li:last-child{
+        border-color : transparent !important;
+    }
+
+    .tree ul li::before{
+        content      : '';
+        display      : block;
+        position     : absolute;
+        top          : calc(var(--spacing) / -2);
+        left         : -2px;
+        width        : calc(var(--spacing) + 2px);
+        height       : calc(var(--spacing) + 1px);
+        border       : solid #ddd;
+        border-width : 0 0 2px 2px;
+    }
+</style>
+
+<script>
+  function openCloseBranch(element) {
+      let id_target = element.getAttribute("aria-controls");
+      target = document.getElementById(id_target);
+      if (target == null) {
+          console.log("Error: " + target + " does not exists")
+          return;
+      }
+      if (target.classList.contains("show")) {
+          target.classList.remove("show");
+          element.setAttribute("aria-expanded", "false");
+      } else {
+          target.classList.add("show");
+          element.setAttribute("aria-expanded", "true");
+      }
+  }
+</script>
+
+<div class="<%= if @display_header; "list-group"; else; "list-unstyled"; end %>">
+  <% if @display_header %>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4 py-0">
+      <h6 class="navbar-brand m-0"><%= unless @tree_manager.get_title.nil?; @tree_manager.get_title; end %></h6>
+      <ul class="navbar-nav">
+        <li class="nav-item text-white"><p class="my-0 mx-3"><%= unless @tree_manager.get_description.nil?; @tree_manager.get_description; end %></p></li>
+      </ul>
+    </nav>
+  <% end %>
+  <li class="<%= if @display_header; "list-group-item"; else; "list-unstyled-item"; end %>">
+    <ul class="list-unstyled tree">
+      <% @tree_manager.get_branches.each do | branch | %>
+        <% unless branch.get_path.include?('.') %>
+          <%= render(branch.render) %>
+        <% end %>
+      <% end %>
+    </ul>
+  </li>
+</div>

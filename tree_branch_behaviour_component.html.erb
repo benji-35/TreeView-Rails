@@ -1,0 +1,18 @@
+<% id_ul = "tree_#{@branch_manager.get_tree_manager.get_tree_name}.#{@branch_manager.get_path}_item".downcase %>
+<% if id_ul.include?("."); id_ul["."] = "_"; end %>
+<% if id_ul.include?(" "); id_ul[" "] = "_"; end %>
+<li class="list-unstyled-item my-2" path="<%= @branch_manager.get_path %>">
+  <button class="btn btn-light w-100" style="text-align: left" type="button" data-toggle="collapse" data-target="#<%= id_ul %>" aria-expanded="false" aria-controls="<%= id_ul %>" onclick="openCloseBranch(this)">
+    <%= @branch_manager.get_path %>
+  </button>
+  <ul class="list-unstyled collapse" id="<%= id_ul %>">
+    <% @branch_manager.get_tree_manager.get_branches.each do | branch | %>
+      <% targeted_path = "#{@branch_manager.get_path}." %>
+      <% count_points = branch.get_path.count('.') %>
+      <% count_needed = @branch_manager.get_path.count('.') + 1 %>
+      <% if branch.get_path.include?(targeted_path) and count_points.eql?(count_needed) %>
+        <%= render(branch.render) %>
+      <% end %>
+    <% end %>
+  </ul>
+</li>
