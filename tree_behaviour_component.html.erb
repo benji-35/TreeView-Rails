@@ -4,26 +4,26 @@
         --radius  : 10px;
     }
 
-    .tree li{
+    .tree li {
         display      : block;
         position     : relative;
         padding-left : calc(2 * var(--spacing) - var(--radius) - 2px);
     }
 
-    .tree ul{
+    .tree {
         margin-left  : calc(var(--radius) - var(--spacing));
         padding-left : 0;
     }
 
-    .tree ul li{
+    .tree li{
         border-left : 2px solid #ddd !important;
     }
 
-    .tree ul li:last-child{
+    .tree li:last-child{
         border-color : transparent !important;
     }
 
-    .tree ul li::before{
+    .tree li::before{
         content      : '';
         display      : block;
         position     : absolute;
