@@ -1,8 +1,8 @@
-<li class="list-unstyled-item my-2 ml-4 px-0 pl-4" path="<%= @branch_manager.get_path %>">
+<li class="list-unstyled-item my-2 ml-2 px-0 pl-2" path="<%= @branch_manager.get_path %>">
   <button class="btn btn-light w-100 tree-branch-btn-<%= @branch_manager.get_tree_manager.get_tree_name %>" style="text-align: left" type="button" data-toggle="collapse" data-target="#<%= @id_ul %>" aria-expanded="false" aria-controls="<%= @id_ul %>">
     <%= @branch_manager.get_path %>
   </button>
-  <ul class="list-unstyled collapse pl-4" id="<%= @id_ul %>">
+  <ul class="list-unstyled collapse pl-2" id="<%= @id_ul %>">
     <% @branch_manager.get_tree_manager.get_branches.each do | branch | %>
       <% targeted_path = "#{@branch_manager.get_path}." %>
       <% count_points = branch.get_path.count('.') %>
