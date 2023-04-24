@@ -19,7 +19,7 @@ class Tree::TreeBranchManagerComponent < ViewComponent::Base
     @display_behaviour = display_behaviour
   end
 
-  def get_date
+  def get_data
     @data
   end
   def get_tree_manager

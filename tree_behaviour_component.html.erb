@@ -28,8 +28,8 @@
         display      : block;
         position     : absolute;
         top          : calc(var(--spacing) / -2);
-        left         : -2px;
-        width        : calc(var(--spacing) + 2px);
+        left         : -1px;
+        width        : calc(var(--spacing) + 1px);
         height       : calc(var(--spacing) + 1px);
         border       : solid #ddd;
         border-width : 0 0 2px 2px;
@@ -37,30 +37,72 @@
 </style>
 
 <script>
-  function openCloseBranch(element) {
-      let id_target = element.getAttribute("aria-controls");
-      target = document.getElementById(id_target);
-      if (target == null) {
-          console.log("Error: " + target + " does not exists")
-          return;
-      }
-      if (target.classList.contains("show")) {
-          target.classList.remove("show");
-          element.setAttribute("aria-expanded", "false");
-      } else {
-          target.classList.add("show");
-          element.setAttribute("aria-expanded", "true");
-      }
-  }
+    function openCloseBranch(element) {
+        let id_target = element.getAttribute("aria-controls");
+        let target = document.getElementById(id_target);
+        if (target == null) {
+            console.log("Error: " + target + " does not exists")
+            return;
+        }
+        if (target.classList.contains("show")) {
+            target.classList.remove("show");
+            element.setAttribute("aria-expanded", "false");
+        } else {
+            target.classList.add("show");
+            element.setAttribute("aria-expanded", "true");
+        }
+    }
+
+    function changeStateTree(element, state) {
+        if (!element.hasAttribute("data-target"))
+            return;
+        const target = element.getAttribute("data-target").substring(1);
+        const ul = document.getElementById(target);
+        if (ul == null)
+            return;
+        if ((ul.classList.contains("show") && !state) || (!ul.classList.contains("show") && state)) {
+            element.click();
+        }
+    }
+
+    function closeAll(tree_name) {
+        const buttons = document.getElementsByClassName("tree-branch-btn-" + tree_name);
+
+        for (let i = 0; i < buttons.length; i++) {
+            changeStateTree(buttons[i], false);
+        }
+    }
+
+    function openAll(tree_name) {
+        const buttons = document.getElementsByClassName("tree-branch-btn-" + tree_name);
+
+        for (let i = 0; i < buttons.length; i++) {
+            changeStateTree(buttons[i], true);
+        }
+    }
 </script>
 
 <div class="<%= if @display_header; "list-group"; else; "list-unstyled"; end %>">
   <% if @display_header %>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4 py-0">
-      <h6 class="navbar-brand m-0"><%= unless @tree_manager.get_title.nil?; @tree_manager.get_title; end %></h6>
-      <ul class="navbar-nav">
-        <li class="nav-item text-white"><p class="my-0 mx-3"><%= unless @tree_manager.get_description.nil?; @tree_manager.get_description; end %></p></li>
-      </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4 py-0 d-flex justify-content-between">
+      <div class="d-inline-flex bg-primary text-white">
+        <div class="navbar-nav h-100 d-flex flex-column">
+          <p class="nav-item text-white"></p>
+          <p class="my-0 mx-3 h6"><%= unless @tree_manager.get_title.nil?; @tree_manager.get_title; end %></p>
+          <p></p>
+        </div>
+        <div class="navbar-nav h-100 d-flex flex-column">
+          <p class="nav-item text-white"></p>
+          <small class="my-0 mx-3"><%= unless @tree_manager.get_description.nil?; @tree_manager.get_description; end %></small>
+          <p></p>
+        </div>
+      </div>
+      <div class="btn-group">
+        <% if @folding_all %>
+          <button class="btn btn-light btn-sm" type="button" onclick="openAll('<%= @tree_manager.get_tree_name %>')">Tout ouvrir</button>
+          <button class="btn btn-light btn-sm" type="button" onclick="closeAll('<%= @tree_manager.get_tree_name %>')">Tout fermer</button>
+        <% end %>
+      </div>
     </nav>
   <% end %>
   <li class="<%= if @display_header; "list-group-item"; else; "list-unstyled-item"; end %>">
